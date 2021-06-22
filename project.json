@@ -3,6 +3,7 @@
   "description": "Пустая библиотека",
   "main": "NewActivity.xaml",
   "dependencies": {
+    "System.Diagnostics.Process": "4.3.0",
     "System.Text.Encoding.CodePages": "4.5.1",
     "UiPath.Excel.Activities": "2.10.4",
     "UiPath.Mail.Activities": "1.10.5",

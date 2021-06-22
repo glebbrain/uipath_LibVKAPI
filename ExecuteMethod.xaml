@@ -8,7 +8,7 @@
     <x:Property Name="Parameters" Type="InArgument(sd:DataTable)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
-  <sap:VirtualizedContainerService.HintSize>1098,641</sap:VirtualizedContainerService.HintSize>
+  <sap:VirtualizedContainerService.HintSize>1062,851</sap:VirtualizedContainerService.HintSize>
   <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
@@ -40,6 +40,10 @@
       <x:String>System.Reflection</x:String>
       <x:String>System.Runtime.InteropServices</x:String>
       <x:String>System.Linq.Expressions</x:String>
+      <x:String>System.Collections.ObjectModel</x:String>
+      <x:String>System.Management.Automation</x:String>
+      <x:String>System.Dynamic</x:String>
+      <x:String>System.Activities.DynamicUpdate</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -76,36 +80,73 @@
       <AssemblyReference>UiPath.Excel</AssemblyReference>
       <AssemblyReference>UiPath.Mail</AssemblyReference>
       <AssemblyReference>UiPath.UIAutomationCore</AssemblyReference>
+      <AssemblyReference>System.Management.Automation</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
       <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence DisplayName="ExecuteMethod" sap:VirtualizedContainerService.HintSize="376,256" sap2010:WorkflowViewState.IdRef="Sequence_1">
+  <Sequence DisplayName="ExecuteMethod" sap:VirtualizedContainerService.HintSize="376,686" sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="x:String" Name="VKAPI_LOGIN" />
+      <Variable x:TypeArguments="x:String" Name="VKAPI_PSW" />
+      <Variable x:TypeArguments="x:String" Name="VKAPI_APPID" />
+      <Variable x:TypeArguments="x:String" Name="OutStringFromCMD" />
+    </Sequence.Variables>
     <sap:WorkflowViewStateService.ViewState>
       <scg:Dictionary x:TypeArguments="x:String, x:Object">
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <ui:InvokeCode ContinueOnError="{x:Null}" Code="VkNet.VkApi api = new VkNet.VkApi();&#xD;&#xA;if (!String.IsNullOrEmpty(token.Trim()))&#xD;&#xA;{&#xD;&#xA;    api.Authorize(new VkNet.Model.ApiAuthParams()&#xD;&#xA;    {&#xD;&#xA;        AccessToken = token&#xD;&#xA;    });&#xD;&#xA;}&#xD;&#xA;if (!String.IsNullOrEmpty(api.Token))&#xD;&#xA;{&#xD;&#xA;    VkNet.Utils.VkParameters methodParams = null;&#xD;&#xA;    if (parameters != null &amp;&amp; parameters.Rows.Count &gt; 0)&#xD;&#xA;    {&#xD;&#xA;        foreach (DataRow dr in parameters.Rows)&#xD;&#xA;        {&#xD;&#xA;            foreach (DataColumn dc in parameters.Columns)&#xD;&#xA;            {&#xD;&#xA;                methodParams.Add(dc.ColumnName, dr[dc]);&#xD;&#xA;            }&#xD;&#xA;        }&#xD;&#xA;    }&#xD;&#xA;    try&#xD;&#xA;    {&#xD;&#xA;        if (api != null &amp;&amp; !String.IsNullOrEmpty(api.Token.Trim()))&#xD;&#xA;        {&#xD;&#xA;            if (!String.IsNullOrEmpty(methodName.Trim()))&#xD;&#xA;            {&#xD;&#xA;                VkNet.Utils.VkResponse r = api.Call(methodName, methodParams);&#xD;&#xA;                if (r.RawJson.ToString().ToLower().IndexOf(&quot;error&quot;) &gt; -1)&#xD;&#xA;                {&#xD;&#xA;                    errorMessage = r.RawJson;&#xD;&#xA;                    response = &quot;&quot;;&#xD;&#xA;                }&#xD;&#xA;                else&#xD;&#xA;                {&#xD;&#xA;                    response = r.RawJson;&#xD;&#xA;                    success = true;&#xD;&#xA;                }&#xD;&#xA;            }&#xD;&#xA;            else&#xD;&#xA;            {&#xD;&#xA;                errorMessage = &quot;Method name is empty&quot;;&#xD;&#xA;            }&#xD;&#xA;        }&#xD;&#xA;        else&#xD;&#xA;        {&#xD;&#xA;            errorMessage = &quot;VkApi is empty&quot;;&#xD;&#xA;        }&#xD;&#xA;    }&#xD;&#xA;    catch (Exception ex)&#xD;&#xA;    {&#xD;&#xA;        if (ex.Message.ToString().ToLower().IndexOf(&quot;error&quot;) &gt; -1)&#xD;&#xA;        {&#xD;&#xA;            errorMessage = ex.Message.ToString();&#xD;&#xA;        }&#xD;&#xA;    }&#xD;&#xA;}" DisplayName="Invoke code" sap:VirtualizedContainerService.HintSize="334,164" sap2010:WorkflowViewState.IdRef="InvokeCode_1" Language="CSharp">
+    <ui:GetEnvironmentVariable DisplayName="Get Environment Variable" sap:VirtualizedContainerService.HintSize="334,59" sap2010:WorkflowViewState.IdRef="GetEnvironmentVariable_2" Variable="VKAPI_LOGIN">
+      <ui:GetEnvironmentVariable.VariableValue>
+        <OutArgument x:TypeArguments="x:String">
+          <mca:CSharpReference x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpReference`1_4">VKAPI_LOGIN</mca:CSharpReference>
+        </OutArgument>
+      </ui:GetEnvironmentVariable.VariableValue>
+    </ui:GetEnvironmentVariable>
+    <ui:GetEnvironmentVariable DisplayName="Get Environment Variable" sap:VirtualizedContainerService.HintSize="334,59" sap2010:WorkflowViewState.IdRef="GetEnvironmentVariable_3" Variable="VKAPI_PSW">
+      <ui:GetEnvironmentVariable.VariableValue>
+        <OutArgument x:TypeArguments="x:String">
+          <mca:CSharpReference x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpReference`1_5">VKAPI_PSW</mca:CSharpReference>
+        </OutArgument>
+      </ui:GetEnvironmentVariable.VariableValue>
+    </ui:GetEnvironmentVariable>
+    <ui:GetEnvironmentVariable DisplayName="Get Environment Variable" sap:VirtualizedContainerService.HintSize="334,59" sap2010:WorkflowViewState.IdRef="GetEnvironmentVariable_1" Variable="VKAPI_APPID">
+      <ui:GetEnvironmentVariable.VariableValue>
+        <OutArgument x:TypeArguments="x:String">
+          <mca:CSharpReference x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpReference`1_6">VKAPI_APPID</mca:CSharpReference>
+        </OutArgument>
+      </ui:GetEnvironmentVariable.VariableValue>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+    </ui:GetEnvironmentVariable>
+    <ui:InvokeCode ContinueOnError="{x:Null}" Code="try&#xD;&#xA;{&#xD;&#xA;&#x9;System.Diagnostics.ProcessStartInfo procStartInfo = new System.Diagnostics.ProcessStartInfo(&quot;cmd&quot;, &quot;/c &quot; + Path+&quot; &quot;+AppID+&quot; &quot;+Login+&quot; &quot;+Password);&#xD;&#xA;&#x9;procStartInfo.RedirectStandardOutput = true;&#xD;&#xA;&#x9;procStartInfo.UseShellExecute = false;&#xD;&#xA;&#x9;procStartInfo.CreateNoWindow = true;&#xD;&#xA;&#x9;System.Diagnostics.Process proc = new System.Diagnostics.Process();&#xD;&#xA;&#x9;proc.StartInfo = procStartInfo;&#xD;&#xA;&#x9;proc.Start();&#xD;&#xA;&#x9;result = &quot;&quot;;&#xD;&#xA;&#x9;using (StreamReader sr = proc.StandardOutput)&#xD;&#xA;&#x9;{&#xD;&#xA;&#x9;&#x9;string line;&#xD;&#xA;&#x9;&#x9;while ((line = sr.ReadLine()) != null)&#xD;&#xA;&#x9;&#x9;{&#xD;&#xA;&#x9;&#x9;&#x9;if(line.IndexOf(&quot;access_token:&quot;)&gt;-1){&#xD;&#xA;&#x9;&#x9;&#x9;&#x9;result = line.Split(':').GetValue(1).ToString().Trim();&#xD;&#xA;&#x9;&#x9;&#x9;}&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;}&#xD;&#xA;}&#xD;&#xA;catch (Exception objException)&#xD;&#xA;{&#xD;&#xA;&#xD;&#xA;}" DisplayName="Invoke code" sap:VirtualizedContainerService.HintSize="334,164" sap2010:WorkflowViewState.IdRef="InvokeCode_2" Language="CSharp">
       <ui:InvokeCode.Arguments>
-        <InArgument x:TypeArguments="x:String" x:Key="token">
-          <mca:CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_3">Token</mca:CSharpValue>
-        </InArgument>
-        <InArgument x:TypeArguments="x:String" x:Key="methodName">
-          <mca:CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_2">MethodName</mca:CSharpValue>
-        </InArgument>
-        <InArgument x:TypeArguments="sd:DataTable" x:Key="parameters">
-          <mca:CSharpValue x:TypeArguments="sd:DataTable" sap2010:WorkflowViewState.IdRef="CSharpValue`1_1">Parameters</mca:CSharpValue>
-        </InArgument>
-        <OutArgument x:TypeArguments="x:String" x:Key="errorMessage">
-          <mca:CSharpReference x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpReference`1_1">ErrorMessage</mca:CSharpReference>
+        <OutArgument x:TypeArguments="x:String" x:Key="result">
+          <mca:CSharpReference x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpReference`1_8">OutStringFromCMD</mca:CSharpReference>
         </OutArgument>
-        <OutArgument x:TypeArguments="x:Boolean" x:Key="success">
-          <mca:CSharpReference x:TypeArguments="x:Boolean" sap2010:WorkflowViewState.IdRef="CSharpReference`1_2">Success</mca:CSharpReference>
-        </OutArgument>
-        <OutArgument x:TypeArguments="x:String" x:Key="response">
-          <mca:CSharpReference x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpReference`1_3">Response</mca:CSharpReference>
-        </OutArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="Path">F:\UiPath\Libraries\VK_get_token\vk_token_get\vk_token_get\bin\Debug\net5.0\vk_token_get.exe</InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="Login">
+          <mca:CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_7">VKAPI_LOGIN</mca:CSharpValue>
+        </InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="Password">
+          <mca:CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_8">VKAPI_PSW</mca:CSharpValue>
+        </InArgument>
+        <InArgument x:TypeArguments="x:String" x:Key="AppID">
+          <mca:CSharpValue x:TypeArguments="x:String" sap2010:WorkflowViewState.IdRef="CSharpValue`1_9">VKAPI_APPID</mca:CSharpValue>
+        </InArgument>
       </ui:InvokeCode.Arguments>
     </ui:InvokeCode>
+    <ui:LogMessage DisplayName="Log Message" sap:VirtualizedContainerService.HintSize="334,93" sap2010:WorkflowViewState.IdRef="LogMessage_1" Level="Fatal">
+      <ui:LogMessage.Message>
+        <InArgument x:TypeArguments="x:Object">
+          <mca:CSharpValue x:TypeArguments="x:Object" sap2010:WorkflowViewState.IdRef="CSharpValue`1_10">OutStringFromCMD</mca:CSharpValue>
+        </InArgument>
+      </ui:LogMessage.Message>
+    </ui:LogMessage>
   </Sequence>
 </Activity>
